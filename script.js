@@ -1,9 +1,5 @@
 "use strict";
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// BANKIST APP
-
 // Data
 const account1 = {
   owner: "Jonas Schmedtmann",
@@ -81,10 +77,12 @@ const displayMovements = (movements) => {
   });
 };
 
-const calcDisplayBalance = (movements) => {
-  const balance = movements.reduce((balance, mov) => balance + mov, 0);
-  console.log(balance);
-  labelBalance.textContent = `${balance}€`;
+const calcDisplayBalance = (account) => {
+  account.balance = account.movements.reduce(
+    (balance, mov) => balance + mov,
+    0
+  );
+  labelBalance.textContent = `${account.balance}€`;
 };
 
 const calcDisplaySummary = (account) => {
@@ -123,6 +121,16 @@ const createUsernames = (accounts) => {
 
 createUsernames(accounts);
 
+const updateUI = (account) => {
+  // Display movements
+  displayMovements(account.movements);
+
+  // Display balance
+  calcDisplayBalance(account);
+
+  // Display summary
+  calcDisplaySummary(account);
+};
 // // Maximum value
 // const max = (movements) =>
 //   movements.reduce((acc, mov) => (mov > acc ? (acc = mov) : acc), movements[0]);
@@ -152,14 +160,31 @@ btnLogin.addEventListener("click", (e) => {
     inputLoginUsername.blur();
     inputLoginPin.blur();
 
-    // Display movements
-    displayMovements(currentAccount.movements);
-
-    // Display balance
-    calcDisplayBalance(currentAccount.movements);
-
-    // Display summary
-    calcDisplaySummary(currentAccount);
+    updateUI(currentAccount);
   }
 });
-// LECTURES
+
+btnTransfer.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+  const receiverAccount = accounts.find(
+    (account) => account.username === inputTransferTo.value
+  );
+
+  inputTransferAmount.value = inputTransferTo.value = "";
+
+  if (
+    amount > 0 &&
+    receiverAccount &&
+    currentAccount.balance >= amount &&
+    receiverAccount?.username !== currentAccount.username
+  ) {
+    // Transfer
+    currentAccount.movements.push(-amount);
+    receiverAccount.movements.push(amount);
+
+    // Update display
+    updateUI(currentAccount);
+  }
+});
