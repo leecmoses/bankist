@@ -230,11 +230,25 @@ btnClose.addEventListener("click", (e) => {
   inputCloseUsername.value = inputClosePin.value = "";
 });
 
-let isSorted = false;
+// let isSorted = false;
 
-btnSort.addEventListener("click", (e) => {
-  e.preventDefault();
+// btnSort.addEventListener("click", (e) => {
+//   e.preventDefault();
 
-  displayMovements(currentAccount.movements, !isSorted);
-  isSorted = !isSorted;
-});
+//   displayMovements(currentAccount.movements, !isSorted);
+//   isSorted = !isSorted;
+// });
+
+// labelBalance.addEventListener("click", () => {
+//   const movementsUI = Array.from(
+//     document.querySelectorAll(".movements__value"),
+//     (el) => Number(el.textContent.replace("€", ""))
+//   );
+//   console.log(movementsUI);
+
+//   // Alternative solution
+//   // const movementsUI2 = [...document.querySelectorAll(".movements__value")].map(
+//   //   (el) => Number(el.textContent.replace("€", ""))
+//   // );
+//   // console.log(movementsUI2);
+// });
