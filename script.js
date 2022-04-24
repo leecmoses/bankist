@@ -160,7 +160,7 @@ btnLogin.addEventListener("click", (e) => {
     (acc) => acc.username === inputLoginUsername.value
   );
 
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+  if (currentAccount?.pin === +inputLoginPin.value) {
     // Display UI and welcome message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(" ")[0]
@@ -181,7 +181,7 @@ btnLogin.addEventListener("click", (e) => {
 btnTransfer.addEventListener("click", (e) => {
   e.preventDefault();
 
-  const amount = Number(inputTransferAmount.value);
+  const amount = +inputTransferAmount.value;
   const receiverAccount = accounts.find(
     (account) => account.username === inputTransferTo.value
   );
@@ -206,7 +206,7 @@ btnTransfer.addEventListener("click", (e) => {
 btnLoan.addEventListener("click", (e) => {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = +inputLoanAmount.value;
 
   if (
     amount > 0 &&
@@ -226,7 +226,7 @@ btnClose.addEventListener("click", (e) => {
 
   if (
     inputCloseUsername.value === currentAccount.username &&
-    Number(inputClosePin.value) === currentAccount.pin
+    +inputClosePin.value === currentAccount.pin
   ) {
     // Find account index
     const index = accounts.findIndex(
@@ -241,55 +241,3 @@ btnClose.addEventListener("click", (e) => {
 
   inputCloseUsername.value = inputClosePin.value = "";
 });
-
-// let isSorted = false;
-
-// btnSort.addEventListener("click", (e) => {
-//   e.preventDefault();
-
-//   displayMovements(currentAccount.movements, !isSorted);
-//   isSorted = !isSorted;
-// });
-
-// labelBalance.addEventListener("click", () => {
-//   const movementsUI = Array.from(
-//     document.querySelectorAll(".movements__value"),
-//     (el) => Number(el.textContent.replace("€", ""))
-//   );
-//   console.log(movementsUI);
-
-//   // Alternative solution
-//   // const movementsUI2 = [...document.querySelectorAll(".movements__value")].map(
-//   //   (el) => Number(el.textContent.replace("€", ""))
-//   // );
-//   // console.log(movementsUI2);
-// });
-
-// PRACTICE
-// Solution #1
-// const numDeposits1000 = accounts
-//   .flatMap((acc) => acc.movements)
-//   .filter((mov) => mov >= 1000).length;
-
-// Solution #2 using reduce and prefixed ++ operator
-// const numDeposits1000 = accounts
-//   .flatMap((acc) => acc.movements)
-//   .reduce((count, cur) => {
-//     return cur >= 1000 ? ++count : count;
-//   }, 0);
-
-// console.log(numDeposits1000);
-
-// Using accumlator for sums within an object
-// const { deposits, withdrawals } = accounts
-//   .flatMap((acc) => acc.movements)
-//   .reduce(
-//     (sums, cur) => {
-//       // cur > 0 ? (sums.deposits += cur) : (sums.withdrawals += cur);
-//       sums[cur > 0 ? "deposits" : "withdrawals"] += cur; // More DRY than the line above
-//       return sums;
-//     },
-//     { deposits: 0, withdrawals: 0 }
-//   );
-
-// console.log(deposits, withdrawals);
