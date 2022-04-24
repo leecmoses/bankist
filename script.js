@@ -83,7 +83,7 @@ const displayMovements = (movements, sort = false) => {
       i + 1
     } ${type}</div>
   
-        <div class="movements__value">${mov}€</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
 
@@ -96,19 +96,19 @@ const calcDisplayBalance = (account) => {
     (balance, mov) => balance + mov,
     0
   );
-  labelBalance.textContent = `${account.balance}€`;
+  labelBalance.textContent = `${account.balance.toFixed(2)}€`;
 };
 
 const calcDisplaySummary = (account) => {
   const incomes = account.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   const outcomes = account.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(outcomes)}€`;
+  labelSumOut.textContent = `${Math.abs(outcomes.toFixed(2))}€`;
 
   const interest = account.movements
     .filter((mov) => mov > 0)
@@ -119,6 +119,7 @@ const calcDisplaySummary = (account) => {
     .reduce((acc, int) => acc + int);
 
   // Avoid chaining methods that has side-effects such as mutating the original array or object
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 // Create a function that takes an array of accounts and creates a username property for every account object
@@ -206,7 +207,7 @@ btnTransfer.addEventListener("click", (e) => {
 btnLoan.addEventListener("click", (e) => {
   e.preventDefault();
 
-  const amount = +inputLoanAmount.value;
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (
     amount > 0 &&
