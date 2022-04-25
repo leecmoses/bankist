@@ -136,3 +136,45 @@ console.log((2.7).toFixed(0));
 console.log((2.7).toFixed(3));
 console.log((2.345).toFixed(2));
 console.log(+(2.345).toFixed(3));
+
+// Using modulo to see if a number is even or odd;
+// For every nth time use the remainder (modulo) operator
+const isEven = (n) => n % 2 === 0;
+
+console.log(isEven(123));
+console.log(isEven(12));
+
+// Numeric Separators (_) ES2021
+const diameter = 287_460_000_000;
+console.log(diameter);
+
+const priceCents = 345_99;
+console.log(priceCents);
+
+const transferFee1 = 15_00;
+const transferFee2 = 1_500;
+
+console.log(String(230_000)); // this will work
+console.log(Number("23_000")); // this will return NaN
+
+// Biggest number JS can safely save
+console.log(2 ** 53 - 1);
+console.log(Number.MAX_SAFE_INTEGER);
+
+// BigInt (suffix n) ES2020
+console.log(1234553245532454345654n);
+console.log(BigInt(234523432443));
+
+// Impossible to mix BigInt to other types
+const huge = 213453245324434n;
+const num = 23;
+// console.log(huge * num); // returns an error, Uncaught TypeError: Cannot mix BigInt and other types, use explicit conversions
+console.log(huge * BigInt(num)); // have to convert num into BigInt
+
+console.log(20n > 15);
+console.log(20n === 20); // returns false because different primitive types
+console.log(20n == 20); // returns true because of type coercion
+
+// Divisions
+console.log(11n / 3n); // returns 3n
+console.log(10 / 3); // returns 3.333
