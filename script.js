@@ -83,6 +83,12 @@ const formatMovementDate = (date, locale) => {
   return new Intl.DateTimeFormat(locale).format(date);
 };
 
+const formatCur = (value, locale, currency) => {
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currency,
+  }).format(value);
+};
 const displayMovements = (acc, sort = false) => {
   containerMovements.innerHTML = "";
 
@@ -96,13 +102,15 @@ const displayMovements = (acc, sort = false) => {
     const date = new Date(acc.movementsDates[i]);
     const displayDate = formatMovementDate(date, acc.locale);
 
+    const formattedMov = formatCur(mov, acc.locale, acc.currency);
+
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
         <div class="movements__date">${displayDate}</div>
-        <div class="movements__value">${mov.toFixed(2)}€</div>
+        <div class="movements__value">${formattedMov}</div>
       </div>
     `;
 
@@ -110,39 +118,46 @@ const displayMovements = (acc, sort = false) => {
   });
 };
 
-const calcDisplayBalance = (account) => {
-  account.balance = account.movements.reduce(
-    (balance, mov) => balance + mov,
-    0
-  );
-  labelBalance.textContent = `${account.balance.toFixed(2)}€`;
+const calcDisplayBalance = (acc) => {
+  acc.balance = acc.movements.reduce((balance, mov) => balance + mov, 0);
+  labelBalance.textContent = `${formatCur(
+    acc.balance,
+    acc.locale,
+    acc.currency
+  )}`;
 };
 
-const calcDisplaySummary = (account) => {
-  const incomes = account.movements
+const calcDisplaySummary = (acc) => {
+  const incomes = acc.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumIn.textContent = `${formatCur(incomes, acc.locale, acc.currency)}`;
 
-  const outcomes = account.movements
+  const outcomes = acc.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(outcomes.toFixed(2))}€`;
+  labelSumOut.textContent = `${formatCur(
+    Math.abs(outcomes),
+    acc.locale,
+    acc.currency
+  )}`;
 
-  const interest = account.movements
+  const interest = acc.movements
     .filter((mov) => mov > 0)
     .map((dep) => {
-      return (dep * account.interestRate) / 100;
+      return (dep * acc.interestRate) / 100;
     })
     .filter((int) => int >= 1)
     .reduce((acc, int) => acc + int);
 
   // Avoid chaining methods that has side-effects such as mutating the original array or object
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = `${formatCur(
+    interest,
+    acc.locale,
+    acc.currency
+  )}`;
 };
 
-// Create a function that takes an array of accounts and creates a username property for every account object
-// Below function does not have a return statement because it creates a side-effect by mutating the object that is being passed
 const createUsernames = (accounts) => {
   accounts.forEach((account) => {
     account.username = account.owner
